@@ -4,10 +4,13 @@
 
 #include "DirectX\DxResourcesManager.h"
 
+#include "EntityComponentSystem\Components\ComponentPool.h"
+#include "EntityComponentSystem\ECSManager.h"
+
+#include "Input\InputMgr.h"
+
 namespace aqua
 {
-
-Core* patterns::Singleton<Core>::s_instance = nullptr;
 
 bool Core::Initialize()
 {
@@ -17,11 +20,23 @@ bool Core::Initialize()
 	DxResourcesManager::GetInstance()->Initialize(TEST_SCREEN_WIDTH, TEST_SCREEN_HEIGHT, true, m_hwnd,
 		false, 1000.0f, 0.1f);
 
+	ecs::ComponentPool::CreateInstance();
+	ecs::ECSManager::CreateInstance();
+	ecs::ECSManager::GetInstance()->LoadEntities();
+	ecs::ECSManager::GetInstance()->LoadSystems();
+
+	InputMgr::CreateInstance();
+	InputMgr::GetInstance()->Initialize();
+
 	return true;
 }
 
 bool Core::Shutdown()
 {
+	InputMgr::GetInstance()->Shutdown();
+	ecs::ECSManager::GetInstance()->Shutdown();
+	DxResourcesManager::GetInstance()->Shutdown();
+
 	ShutdownWindows();
 
 	m_hwnd = nullptr;
@@ -35,13 +50,10 @@ LRESULT Core::HandleMessage(HWND _hwnd, const UINT _umsg, WPARAM _wparam, LPARAM
 {
 	switch (_umsg) 
 	{
-	/*case WM_KEYDOWN:
-		mInput->KeyDown((unsigned int)_wparam);
-		return 0;*/
-
-		/* case WM_KEYUP:
-		mInput->KeyUp((unsigned int)_wparam);
-		return 0;*/
+	case WM_KEYDOWN:
+		InputMgr::GetInstance()->KeyDown((unsigned int)_wparam);
+		return 0;
+		break;
 
 	default:
 		return DefWindowProc(_hwnd, _umsg, _wparam, _lparam);
@@ -52,7 +64,6 @@ void Core::RunMainLoop()
 {
 	MSG msg;
 	bool done;
-	bool result;
 
 	ZeroMemory(&msg, sizeof(MSG));
 
@@ -72,14 +83,7 @@ void Core::RunMainLoop()
 		}
 		else 
 		{
-			/*result = ProcessFrame();
-			if (!result) {
-				done = true;
-			}*/
-			float color[4] = { 0.0, 1.0, 0.0, 1.0 };
-			DxResourcesManager::GetInstance()->BeginScene(color);
-			DxResourcesManager::GetInstance()->EndScene();
-
+			done = !ProcessFrame();
 		}
 	}
 }
@@ -162,6 +166,21 @@ void Core::ShutdownWindows()
 #endif
 
 	DestroyWindow(m_hwnd);
+}
+
+bool Core::ProcessFrame()
+{
+	if (InputMgr::GetInstance()->GetLastPressed() == VK_ESCAPE)
+	{
+		return false;
+	}
+
+	float color[4] = { 0.0, 0.0, 0.0, 1.0 };
+	DxResourcesManager::GetInstance()->BeginScene(color);
+	ecs::ECSManager::GetInstance()->Update();
+	DxResourcesManager::GetInstance()->EndScene();
+
+	return true;
 }
 
 LRESULT CALLBACK WndProc(HWND _hwnd, UINT _umessage, WPARAM _wparam, LPARAM _lparam)

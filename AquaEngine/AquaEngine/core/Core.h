@@ -23,6 +23,8 @@ private:
 	int2 InitializeWindows();
 	void ShutdownWindows();
 
+	bool ProcessFrame();
+
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hInstance;
 	HWND m_hwnd;

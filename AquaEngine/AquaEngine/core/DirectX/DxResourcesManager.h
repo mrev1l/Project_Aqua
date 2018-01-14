@@ -15,8 +15,11 @@ public:
 	void BeginScene(float* _color);
 	void EndScene();
 
+	Microsoft::WRL::ComPtr<ID3D11Device> GetD3DDevice();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetD3DContext();
+
 private:
-	bool mVsyncEnabled;
+	bool m_vsyncEnabled;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>			m_swapChain;
 	Microsoft::WRL::ComPtr<ID3D11Device>			m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>		m_deviceContext;

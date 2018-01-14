@@ -16,6 +16,7 @@ public:
 
 	static T* GetInstance()
 	{
+		//assert
 		return Singleton<T>::s_instance;
 	}
 
@@ -47,6 +48,9 @@ protected:
 
 	static T* s_instance;
 };
+
+template<class T>
+T* Singleton<T>::s_instance = 0;
 
 }
 }

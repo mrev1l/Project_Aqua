@@ -11,5 +11,7 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PSTR _pScmdli
 
 	aqua::Core::GetInstance()->RunMainLoop();
 
+	aqua::Core::GetInstance()->Shutdown();
+
 	return 0;
 }

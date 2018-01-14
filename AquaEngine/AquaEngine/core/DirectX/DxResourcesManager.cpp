@@ -5,8 +5,11 @@ namespace aqua
 
 DxResourcesManager* patterns::Singleton<DxResourcesManager>::s_instance = nullptr;
 
-bool DxResourcesManager::Initialize(const int _screenW, const int _screenH, const bool _vsync, HWND _hwnd, const bool _fullscreen, const float _screenDepth, const float _screenNear)
+bool DxResourcesManager::Initialize(const int _screenW, const int _screenH, const bool _vsync, HWND _hwnd, const bool _fullscreen, 
+	const float _screenDepth, const float _screenNear)
 {
+	m_vsyncEnabled = true;
+
 	CreateDeviceIndependentResources();
 	CreateDeviceDependentResources(_screenW, _screenH, _hwnd, _fullscreen);
 	CreateTargetAndStates(_screenW, _screenH);
@@ -17,6 +20,22 @@ bool DxResourcesManager::Initialize(const int _screenW, const int _screenH, cons
 
 bool DxResourcesManager::Shutdown()
 {
+	m_d2dContext.Reset();
+	m_d2dDevice.Reset();
+
+	m_depthDisabledStencilState.Reset();
+	m_rasterState.Reset();
+	m_depthStencilView.Reset();
+	m_depthStencilState.Reset();
+	m_depthStencilBuffer.Reset();
+	m_renderTargetView.Reset();
+
+	m_deviceContext.Reset();
+	m_device.Reset();
+	m_swapChain.Reset();
+
+	m_d2dFactory.Reset();
+
 	return true;
 }
 
@@ -29,14 +48,26 @@ void DxResourcesManager::BeginScene(float * _color)
 void DxResourcesManager::EndScene()
 {
 	// Present the back buffer to the screen since rendering is complete.
-	if (mVsyncEnabled) {
+	if (m_vsyncEnabled)
+	{
 		// Lock to screen refresh rate.
 		m_swapChain->Present(1, 0);
 	}
-	else {
+	else 
+	{
 		// Present as fast as possible.
 		m_swapChain->Present(0, 0);
 	}
+}
+
+Microsoft::WRL::ComPtr<ID3D11Device> DxResourcesManager::GetD3DDevice()
+{
+	return m_device;
+}
+
+Microsoft::WRL::ComPtr<ID3D11DeviceContext> DxResourcesManager::GetD3DContext()
+{
+	return m_deviceContext;
 }
 
 void DxResourcesManager::CreateDeviceIndependentResources()
@@ -58,7 +89,7 @@ void DxResourcesManager::CreateDeviceDependentResources(const unsigned int _scre
 	swapChainDesc.BufferDesc.Height = _screenH;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	if (mVsyncEnabled)
+	if (m_vsyncEnabled)
 	{
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = numerator;
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = denominator;
@@ -91,7 +122,8 @@ void DxResourcesManager::CreateDeviceDependentResources(const unsigned int _scre
 
 	swapChainDesc.Flags = 0;
 
-	D3D_FEATURE_LEVEL featureLevels[] = {
+	D3D_FEATURE_LEVEL featureLevels[] = 
+	{
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
@@ -214,13 +246,12 @@ void DxResourcesManager::CreateTargetAndStates(const unsigned int _screenW, cons
 	result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthDisabledStencilState);
 }
 
-	void DxResourcesManager::CreateDirect2DResources()
+void DxResourcesManager::CreateDirect2DResources()
 {
 	D2D1_CREATION_PROPERTIES creationProps;
 	Microsoft::WRL::ComPtr<IDXGIDevice> dxgiDev;
 
 	HRESULT result = m_device.As(&dxgiDev);
-
 
 #ifdef _DEBUG
 	creationProps.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;

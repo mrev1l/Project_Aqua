@@ -30,6 +30,24 @@
     <ClCompile Include="core\EntityComponentSystem\ECSManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="core\EntityComponentSystem\Components\ModelComponent.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="core\EntityComponentSystem\Entities\BaseEntity.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="core\EntityComponentSystem\Systems\RenderableSystem.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="core\EntityComponentSystem\Components\ComponentPool.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="core\EntityComponentSystem\Components\LayoutComponent.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Input\InputMgr.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Patterns\Singleton.h">
@@ -68,5 +86,30 @@
     <ClInclude Include="core\DirectX\DxResourcesManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="core\EntityComponentSystem\Components\ModelComponent.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\EntityComponentSystem\Nodes\RenderableNode.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\EntityComponentSystem\Systems\RenderableSystem.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\EntityComponentSystem\Components\ComponentPool.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Helpers\Enums.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\EntityComponentSystem\Components\LayoutComponent.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Input\InputMgr.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="assets\shaders\SimpleVS.hlsl" />
+    <FxCompile Include="assets\shaders\SimplePS.hlsl" />
   </ItemGroup>
 </Project>

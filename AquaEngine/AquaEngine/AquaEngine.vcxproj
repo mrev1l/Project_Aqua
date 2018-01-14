@@ -72,15 +72,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <OutDir>$(SolutionDir)\!VS_TMP\Build\$(PlatformToolset)\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\!VS_TMP\Intermediate\$(PlatformToolset)\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\!VS_TMP\Build\$(PlatformToolset)\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\!VS_TMP\Intermediate\$(PlatformToolset)\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\!VS_TMP\Build\$(PlatformToolset)\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\!VS_TMP\Intermediate\$(PlatformToolset)\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\!VS_TMP\Build\$(PlatformToolset)\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\!VS_TMP\Intermediate\$(PlatformToolset)\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -149,23 +157,50 @@
   <ItemGroup>
     <ClCompile Include="core\Core.cpp" />
     <ClCompile Include="core\DirectX\DxResourcesManager.cpp" />
+    <ClCompile Include="core\EntityComponentSystem\Components\ComponentPool.cpp" />
+    <ClCompile Include="core\EntityComponentSystem\Components\LayoutComponent.cpp" />
+    <ClCompile Include="core\EntityComponentSystem\Components\ModelComponent.cpp" />
     <ClCompile Include="core\EntityComponentSystem\ECSManager.cpp" />
+    <ClCompile Include="core\EntityComponentSystem\Entities\BaseEntity.cpp" />
     <ClCompile Include="core\EntityComponentSystem\Systems\BaseSystem.cpp" />
+    <ClCompile Include="core\EntityComponentSystem\Systems\RenderableSystem.cpp" />
+    <ClCompile Include="core\Input\InputMgr.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Core.h" />
     <ClInclude Include="core\DirectX\DxResourcesManager.h" />
     <ClInclude Include="core\EntityComponentSystem\Components\BaseComponent.h" />
+    <ClInclude Include="core\EntityComponentSystem\Components\ComponentPool.h" />
+    <ClInclude Include="core\EntityComponentSystem\Components\LayoutComponent.h" />
+    <ClInclude Include="core\EntityComponentSystem\Components\ModelComponent.h" />
     <ClInclude Include="core\EntityComponentSystem\ECSManager.h" />
     <ClInclude Include="core\EntityComponentSystem\Entities\BaseEntity.h" />
     <ClInclude Include="core\EntityComponentSystem\Nodes\BaseNode.h" />
+    <ClInclude Include="core\EntityComponentSystem\Nodes\RenderableNode.h" />
     <ClInclude Include="core\EntityComponentSystem\Systems\BaseSystem.h" />
+    <ClInclude Include="core\EntityComponentSystem\Systems\RenderableSystem.h" />
     <ClInclude Include="core\Helpers\Aligned.h" />
+    <ClInclude Include="core\Helpers\Enums.h" />
     <ClInclude Include="core\Helpers\Dx.h" />
     <ClInclude Include="core\Helpers\EngineDefines.h" />
     <ClInclude Include="core\Helpers\LightTypes.h" />
+    <ClInclude Include="core\Input\InputMgr.h" />
     <ClInclude Include="core\Patterns\Singleton.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="assets\shaders\SimplePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="assets\shaders\SimpleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

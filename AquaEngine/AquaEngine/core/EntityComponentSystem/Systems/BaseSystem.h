@@ -1,5 +1,4 @@
 #pragma once
-#include "core\EntityComponentSystem\Nodes\BaseNode.h"
 #include <vector>
 
 namespace aqua
@@ -7,12 +6,20 @@ namespace aqua
 namespace ecs
 {
 
+class BaseNode;
+
 class BaseSystem
 {
 public:
-	std::vector<BaseNode*> m_targets;
+	BaseSystem() = default;
+	virtual ~BaseSystem() = default;
 
-	void Update();
+	void AddTarget(BaseNode* _node);
+
+	virtual void Update() = 0;
+
+protected:
+	std::vector<BaseNode*> m_targets;
 };
 
 }
