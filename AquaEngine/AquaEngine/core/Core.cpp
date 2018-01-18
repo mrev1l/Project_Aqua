@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "Core.h"
 #include "Helpers\LightTypes.h"
 #include "Helpers\EngineDefines.h"
@@ -148,6 +149,8 @@ int2 Core::InitializeWindows()
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
 		posX, posY, windowSz.x, windowSz.y, NULL, NULL, m_hInstance, NULL);
 
+	::vs_log(m_hwnd != nullptr, ERROR_msg, L"Failed to create window, return code : ", GetLastError());
+
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
@@ -197,7 +200,6 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _umessage, WPARAM _wparam, LPARAM _lpa
 
 	default:
 		return aqua::Core::GetInstance()->HandleMessage(_hwnd, _umessage, _wparam, _lparam);
-
 	}
 }
 

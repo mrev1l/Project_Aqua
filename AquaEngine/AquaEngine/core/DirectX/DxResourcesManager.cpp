@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "DxResourcesManager.h"
 
 namespace aqua
@@ -135,6 +136,8 @@ void DxResourcesManager::CreateDeviceDependentResources(const unsigned int _scre
 
 	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D11_CREATE_DEVICE_BGRA_SUPPORT, featureLevels, ARRAYSIZE(featureLevels),
 		D3D11_SDK_VERSION, &swapChainDesc, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), NULL, m_deviceContext.GetAddressOf());
+
+	::vs_log(FAILED(result), ERROR_msg, "Call to D3D11CreateDeviceAndSwapChain has failed!");
 }
 
 void DxResourcesManager::CreateTargetAndStates(const unsigned int _screenW, const unsigned int _screenH)

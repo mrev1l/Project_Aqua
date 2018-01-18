@@ -185,6 +185,8 @@
     <ClInclude Include="core\Helpers\Dx.h" />
     <ClInclude Include="core\Helpers\EngineDefines.h" />
     <ClInclude Include="core\Helpers\LightTypes.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="core\Helpers\vs_output_assertion.h" />
     <ClInclude Include="core\Input\InputMgr.h" />
     <ClInclude Include="core\Patterns\Singleton.h" />
   </ItemGroup>
