@@ -4,6 +4,9 @@
 
 #include <memory>
 
+#pragma warning(push)
+#pragma warning(disable:4100)
+
 int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PSTR _pScmdline, int _iCmdshow) 
 {
 	aqua::Core::CreateInstance();
@@ -19,3 +22,5 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PSTR _pScmdli
 
 	return 0;
 }
+
+#pragma warning(pop)

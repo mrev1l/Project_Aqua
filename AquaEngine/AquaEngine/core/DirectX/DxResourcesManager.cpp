@@ -16,6 +16,12 @@ bool DxResourcesManager::Initialize(const int _screenW, const int _screenH, cons
 	CreateTargetAndStates(_screenW, _screenH);
 	CreateDirect2DResources();
 
+	if (!_vsync && _screenDepth < 0 && _screenNear < 0)
+	{
+		// adding to shut compilers warning,
+		// will be used to compute the projection matrix
+	}
+
 	return true;
 }
 
@@ -74,6 +80,7 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> DxResourcesManager::GetD3DContext()
 void DxResourcesManager::CreateDeviceIndependentResources()
 {
 	HRESULT result = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, IID_PPV_ARGS(m_d2dFactory.GetAddressOf()));
+	::vs_log(FAILED(result), ERROR_msg, L"Failed to create D2D Factory, hresult = ", result);
 }
 
 void DxResourcesManager::CreateDeviceDependentResources(const unsigned int _screenW, const unsigned int _screenH, HWND _hwnd, const bool _fullscreen)

@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Core.h"
+
 #include "Helpers\LightTypes.h"
 #include "Helpers\EngineDefines.h"
 
@@ -18,11 +19,14 @@ bool Core::Initialize()
 	int2 windowSz = InitializeWindows();
 	//Add assertion code
 	DxResourcesManager::CreateInstance();
-	DxResourcesManager::GetInstance()->Initialize(TEST_SCREEN_WIDTH, TEST_SCREEN_HEIGHT, true, m_hwnd,
+	DxResourcesManager::GetInstance()->Initialize(Defines::k_screenWidth, Defines::k_screenHeight, true, m_hwnd,
 		false, 1000.0f, 0.1f);
 
 	ecs::ComponentPool::CreateInstance();
+	ecs::ComponentPool::GetInstance()->Initialize();
+
 	ecs::ECSManager::CreateInstance();
+	ecs::ECSManager::GetInstance()->Initialize();
 	ecs::ECSManager::GetInstance()->LoadEntities();
 	ecs::ECSManager::GetInstance()->LoadSystems();
 
@@ -37,6 +41,7 @@ bool Core::Shutdown()
 	InputMgr::GetInstance()->Shutdown();
 	ecs::ECSManager::GetInstance()->Shutdown();
 	DxResourcesManager::GetInstance()->Shutdown();
+	ecs::ComponentPool::GetInstance()->Shutdown();
 
 	ShutdownWindows();
 
@@ -122,28 +127,31 @@ int2 Core::InitializeWindows()
 	int posX;
 	int posY;
 	
-#ifdef FULL_SCREEN
-	DEVMODE dmScreenSettings;
-	// If full screen set the screen to maximum size of the users desktop and 32bit.
-	memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+	if (Defines::k_fullScreen)
+	{
+		DEVMODE dmScreenSettings;
+		// If full screen set the screen to maximum size of the users desktop and 32bit.
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 
-	dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-	dmScreenSettings.dmPelsWidth = (unsigned long)windowSz.x;
-	dmScreenSettings.dmPelsHeight = (unsigned long)windowSz.y;
-	dmScreenSettings.dmBitsPerPel = 32;
-	dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+		dmScreenSettings.dmPelsWidth = (unsigned long)windowSz.x;
+		dmScreenSettings.dmPelsHeight = (unsigned long)windowSz.y;
+		dmScreenSettings.dmBitsPerPel = 32;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-	// Change the display settings to full screen.
-	ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+		// Change the display settings to full screen.
+		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 
-	posX = posY = 0;
-#else
-	windowSz.x = TEST_SCREEN_WIDTH;
-	windowSz.y = TEST_SCREEN_HEIGHT;
+		posX = posY = 0;
+	}
+	else
+	{
+		windowSz.x = Defines::k_screenWidth;
+		windowSz.y = Defines::k_screenHeight;
 
-	posX = (GetSystemMetrics(SM_CXSCREEN) - windowSz.x) / 2;
-	posY = (GetSystemMetrics(SM_CYSCREEN) - windowSz.y) / 2;
-#endif
+		posX = (GetSystemMetrics(SM_CXSCREEN) - windowSz.x) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - windowSz.y) / 2;
+	}
 
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,

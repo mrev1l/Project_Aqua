@@ -1,6 +1,15 @@
 #pragma once
 
-//#define FULL_SCREEN
+namespace aqua
+{
 
-#define TEST_SCREEN_WIDTH 1280
-#define TEST_SCREEN_HEIGHT 720
+class Defines
+{
+public:
+	static constexpr int k_screenWidth = 1280;
+	static constexpr int k_screenHeight = 720;
+
+	static constexpr bool k_fullScreen = false;
+};
+
+}

@@ -51,6 +51,9 @@ public:
 	}
 
 private:
+	Logger(const Logger&) = delete;
+	Logger& operator=(const Logger&) = delete;
+
 	std::wstringstream container;
 
 };
